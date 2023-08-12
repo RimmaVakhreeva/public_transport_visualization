@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Example</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+</head>
+<body>
+
+
+<div id="map" style="height: 800px;"></div>
+
+<script>
+    var map = L.map('map').setView([-34.92, 138.65], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: 'Map data &copy;  a<a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    fetch('http://0.0.0.0:8000/tram_coordinates', {
+        method: 'GET',
+    })
+        .then(response => response.json())
+        .then(tram_data_js => {
+            tram_data = Object.entries(tram_data_js).map(item => [item[1]["latitude"], item[1]["longitude"]])
+            tram_data_polygon = L.polygon(
+                tram_data,
+                {
+                    color: 'green'
+                }).addTo(map);
+
+            tram_data_polygon.setStyle({
+                fillColor: 'transparent'
+            });
+            var tram_bounds = tram_data_polygon.getBounds();
+
+            var tram_circle = L.circle(tram_bounds.getCenter(), {
+                color: 'green',
+                fillColor: '#24b300',
+                fillOpacity: 0.5,
+                radius: 20
+            }).addTo(map);
+
+            var tram_idx = 0;
+            var tram_coordinates = tram_data_polygon.getLatLngs()[0];
+            setInterval(function () {
+                tram_circle.setLatLng(tram_coordinates[tram_idx]);
+                tram_idx = (tram_idx + 1) % tram_coordinates.length;
+            }, 2000);
+
+            var tram_text = L.marker(tram_data_polygon.getLatLngs()[0][0], {
+                icon: L.divIcon({
+                    className: 'text-label',
+                    html: 'Tram №37'
+                })
+            }).addTo(map);
+
+            var tram_text_idx = 0;
+            var tram_text_coordinates = tram_data_polygon.getLatLngs()[0];
+            setInterval(function () {
+                tram_text.setLatLng(tram_text_coordinates[tram_text_idx]);
+                tram_text_idx = (tram_text_idx + 1) % tram_text_coordinates.length;
+            }, 2000);
+
+        })
+
+    fetch('http://0.0.0.0:8000/bus_coordinates', {
+        method: 'GET',
+    })
+        .then(response => response.json())
+        .then(bus_data => {
+            bus_data = Object.entries(bus_data).map(item => [item[1]["latitude"], item[1]["longitude"]])
+            bus_data_polygon = L.polygon(bus_data,
+                {
+                    color: 'blue'
+                }).addTo(map);
+
+            bus_data_polygon.setStyle({
+                fillColor: 'transparent'
+            });
+
+            var bus_bounds = bus_data_polygon.getBounds();
+
+            var bus_circle = L.circle(bus_bounds.getCenter(), {
+                color: 'blue',
+                fillColor: '#0029cc',
+                fillOpacity: 0.5,
+                radius: 20
+            }).addTo(map);
+
+            var bus_idx = 0;
+            var bus_coordinates = bus_data_polygon.getLatLngs()[0];
+            setInterval(function () {
+                bus_circle.setLatLng(bus_coordinates[bus_idx]);
+                bus_idx = (bus_idx + 1) % bus_coordinates.length;
+            }, 2000);
+
+            var bus_text = L.marker(bus_data_polygon.getLatLngs()[0][0], {
+                icon: L.divIcon({
+                    className: 'text-label',
+                    html: 'Bus №617'
+                })
+            }).addTo(map);
+
+            var bus_text_idx = 0;
+            var bus_text_coordinates = bus_data_polygon.getLatLngs()[0];
+            setInterval(function () {
+                bus_text.setLatLng(bus_text_coordinates[bus_text_idx]);
+                bus_text_idx = (bus_text_idx + 1) % bus_text_coordinates.length;
+            }, 2000);
+
+        })
+
+</script>
+
+</body>
+</html>
