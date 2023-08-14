@@ -20,7 +20,7 @@
         attribution: 'Map data &copy;  a<a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    fetch('http://0.0.0.0:8000/tram_coordinates', {
+    fetch('https://52.63.191.214:8000/tram_coordinates', {
         method: 'GET',
     })
         .then(response => response.json())
@@ -67,7 +67,7 @@
 
         })
 
-    fetch('http://0.0.0.0:8000/bus_coordinates', {
+    fetch('https://52.63.191.214:8000/bus_coordinates', {
         method: 'GET',
     })
         .then(response => response.json())
