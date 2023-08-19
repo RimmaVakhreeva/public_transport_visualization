@@ -22,3 +22,15 @@ COPY . /amazon_service/
 EXPOSE 1043
 
 CMD make run_app
+
+
+"""
+sudo su
+sudo apt update
+sudo apt install nginx -y
+systemctl status nginx
+mkdir ccf_aws
+cd ccf_aws/
+
+
+"""

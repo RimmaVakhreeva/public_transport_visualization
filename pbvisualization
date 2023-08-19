@@ -28,3 +28,4 @@ server {
         listen 80;
         server_name pbvisualization.com www.pbvisualization.com;
     return 404; # managed by Certbot
+}
