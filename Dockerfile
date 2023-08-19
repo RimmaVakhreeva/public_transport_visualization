@@ -48,19 +48,16 @@ cd /etc/nginx/sites-available/
 rm default
 cd /etc/nginx/sites-enabled/
 rm default
-sudo ln -s /etc/nginx/sites-available/pbvisualization /etc/nginx/sites-enabled/
-sudo ln -s /etc/nginx/sites-available/fastapi_nginx /etc/nginx/sites-enabled/
+
 
 
 cd /home/ubuntu/
 git clone https://github.com/lcalcagni/Deploying-FastAPI-using-Nginx.git
 cd Deploying-FastAPI-using-Nginx/
 apt-get update
-sudo apt install python3-pip
+sudo apt install python3-pip # -y вроде нало поставить
 pip3 install -r requirements.txt
-cd /var/www/
-pip3 install -r requirements.txt
-python3 -m uvicorn main:app
+
 
 
 snap version
@@ -74,5 +71,13 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo certbot --version
 sudo certbot --nginx --test-cert
 sudo certbot renew --dry-run
+
+
+sudo ln -s /etc/nginx/sites-available/pbvisualization /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/fastapi_nginx /etc/nginx/sites-enabled/
+cd /var/www/
+pip3 install -r requirements.txt
+python3 -m uvicorn main:app
+
 
 """
